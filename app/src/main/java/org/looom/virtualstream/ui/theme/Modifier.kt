@@ -18,21 +18,19 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Fill
-import dev.chrisbanes.haze.HazeDefaults.blurRadius
-import dev.chrisbanes.haze.HazeDefaults.noiseFactor
 import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.HazeStyle
-import dev.chrisbanes.haze.hazeChild
 import dev.chrisbanes.haze.hazeEffect
-import dev.chrisbanes.haze.hazeSource
 
 
 /**
  * 首页模块检测的专属样式
+ * hookFlag： 当前有无加载模块
+ * hazeState： 模糊区域，null为不设置模糊
  */
 @Composable
-fun Div_Status_Padding_Modifier(hookFlag: Boolean, hazeState: HazeState): Modifier {
-    return Div_Padding_Modifier(
+fun Modifier.div_Status_Padding_Modifier(hookFlag: Boolean, hazeState: HazeState? = null): Modifier {
+    return div_Padding_Modifier(
         background = if (hookFlag) div_status_able.background
                 else div_status_disable.background,
         hazeState = hazeState
@@ -48,32 +46,39 @@ fun Div_Status_Padding_Modifier(hookFlag: Boolean, hazeState: HazeState): Modifi
  * padding： 盒子内边距
  * blurRadius： 模糊程度
  * alpha： 半透明度
- * hazeState: 模糊区域
+ * hazeState: 模糊区域, null为不设置模糊
  */
 @Composable
-fun Div_Padding_Modifier(
-    marge: Dp =Dimens.div_outerPadding,
+fun Modifier.div_Padding_Modifier(
+    margin: Dp =Dimens.div_outerPadding,
     width: Float = 0.9f,
     shape: Shape = RoundedCornerShape(Dimens.div_cornerRadius),
     background: Color = div_default.background,
     padding: Dp = Dimens.div_innerPadding,
     blurRadius: Dp = 5.dp,
-    alpha: Float = 0.5f,
-    hazeState: HazeState
+    alpha: Float = 0.7f,
+    hazeState: HazeState? = null
 ): Modifier {
     // haze 高斯模糊: https://chrisbanes.github.io/haze/latest/materials/
     // haze 样式： https://chrisbanes.github.io/haze/latest/api/haze/dev.chrisbanes.haze/-haze-style/
-    return Modifier
-        .padding(marge)
+    val bgColor = background.copy(alpha = alpha)
+    return this
+        .padding(margin)
         .fillMaxWidth(width)
         .clip(shape)
-        .hazeEffect(
-            state = hazeState,
-            style = HazeStyle(
-                backgroundColor = background.copy(alpha = alpha),
-                blurRadius = blurRadius,
-                tints = emptyList()
-            )
+        .then(
+            if (hazeState == null){
+                Modifier.background(bgColor)
+            } else {
+                Modifier.hazeEffect(
+                    state = hazeState,
+                    style = HazeStyle(
+                        backgroundColor = bgColor,
+                        blurRadius = blurRadius,
+                        tints = emptyList()
+                    )
+                )
+            }
         )
         .padding(padding)
 }

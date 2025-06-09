@@ -14,12 +14,19 @@ val Pink40 = Color(0xFF7D5260)
 
 val TextGreen = Color(0xFF6bff6b)
 
+
+/**
+ * 模块状态检测 - 未启用
+ */
 object div_status_disable{
     val background = Color.LightGray
 }
 
+/**
+ * 模块状态检测 - 已启用
+ */
 object div_status_able{
-    val background = Color(0xFF00b894)
+    val background = Color(0xFFf38a85)
 }
 
 object div_default{

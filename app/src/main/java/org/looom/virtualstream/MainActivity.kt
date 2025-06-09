@@ -23,6 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.rememberHazeState
+import org.looom.virtualstream.VARIABLE.HAZE_STATE
 import org.looom.virtualstream.pages.AboutPage
 import org.looom.virtualstream.pages.HomePage
 import org.looom.virtualstream.pages.LocalStreamPage
@@ -30,7 +31,23 @@ import org.looom.virtualstream.pages.NetStreamPage
 import org.looom.virtualstream.ui.theme.Box_Main_Background
 import org.looom.virtualstream.ui.theme.VirtualStreamTheme
 
-var HAZE_STATE: HazeState? = null // 记录 haze 模糊区域
+
+
+/**
+ * xposed json 配置模板
+ *
+ * 不要使用 SharedPreferences 不同设备当程序后台时可能出现配置不可读
+ * 也不要试图文件写公共目录，安卓13+只能通过 MediaStore/SAF 读写公共目录
+ */
+object xposed_config {
+    var STREAM_MODE = VARIABLE.STREAM_MODE.NONE.config
+    var STREAM_CAMERA = VARIABLE.STREAM_CAMERA.NONE.config
+}
+
+/**
+ * xposed json 配置模板的文件保存
+ */
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
