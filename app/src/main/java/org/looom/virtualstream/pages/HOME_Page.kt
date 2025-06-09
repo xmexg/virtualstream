@@ -2,18 +2,29 @@ package org.looom.virtualstream.pages
 
 import org.looom.virtualstream.R
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -29,6 +40,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.chrisbanes.haze.hazeSource
+import org.looom.virtualstream.ConfigManager
+import org.looom.virtualstream.SelectableOption
+import org.looom.virtualstream.VARIABLE
 import org.looom.virtualstream.VARIABLE.HAZE_STATE
 import org.looom.virtualstream.ui.theme.Dimens.div_margin
 import org.looom.virtualstream.ui.theme.Dimens.title_size
@@ -39,6 +53,21 @@ import org.looom.virtualstream.ui.theme.div_Status_Padding_Modifier
 @Composable
 fun HomePage(modifier: Modifier = Modifier) {
     var hookFlag by rememberSaveable { mutableStateOf(false) }
+    // 订阅 configFlow 状态
+    val config by ConfigManager.configFlow.collectAsState()
+
+    // 从配置中获取当前串流模式（自动响应变化）
+    val currentMode = remember(config.STREAM_MODE) {
+        VARIABLE.STREAM_MODE.entries.firstOrNull { it.config == config.STREAM_MODE }
+            ?: VARIABLE.STREAM_MODE.NONE
+    }
+
+    // 从配置中获取当前摄像头状态（自动响应变化）
+    val currentCamera: VARIABLE.STREAM_CAMERA = remember(config.STREAM_CAMERA) {
+        VARIABLE.STREAM_CAMERA.entries.firstOrNull { it.config == config.STREAM_CAMERA }
+            ?: VARIABLE.STREAM_CAMERA.NONE
+    }
+
     Box( modifier = modifier ){
         /**
          * 这里的 modifier 几何背景无法被模糊
@@ -84,8 +113,88 @@ fun HomePage(modifier: Modifier = Modifier) {
             }
 
             // 串流选择
-            Row (modifier = Modifier.div_Padding_Modifier(hazeState = HAZE_STATE)) {
-                Text("选择串流：")
+            Column (modifier = Modifier.div_Padding_Modifier(hazeState = HAZE_STATE)) {
+                Text("串流及摄像头配置：")
+                ModeSelector(
+                    currentMode = currentMode,
+                    onModeChange = { mode ->
+                        // 更新配置（自动通知观察者）
+                        val newConfig = config.copy(STREAM_MODE = mode.config)
+                        ConfigManager.updateConfig(newConfig)
+                        println("当前选择的串流模式: ${mode.label}")
+                    },
+                    label = "选择串流:",
+                    hint = "串流模式",
+                    options = VARIABLE.STREAM_MODE.entries.toTypedArray()
+                )
+                ModeSelector(
+                    currentMode = currentCamera,
+                    onModeChange = { camera ->
+                        // 更新配置（自动通知观察者）
+                        val newConfig = config.copy(STREAM_CAMERA = camera.config)
+                        ConfigManager.updateConfig(newConfig)
+                        println("当前选择的摄像头: ${camera.label}")
+                    },
+                    label = "选择摄像头:",
+                    hint = "摄像头模式",
+                    options = VARIABLE.STREAM_CAMERA.entries.toTypedArray()
+                )
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun <T> ModeSelector(
+    currentMode: T,
+    onModeChange: (T) -> Unit,
+    label: String,
+    hint: String,
+    options: Array<T>
+) where T : Enum<T>, T : SelectableOption {
+    var expanded by rememberSaveable { mutableStateOf(false) }
+
+    val selectedText = currentMode.label
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .div_Padding_Modifier(width = 1f, padding = 0.dp, hazeState = HAZE_STATE),
+        horizontalArrangement = Arrangement.SpaceEvenly,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(label, modifier = Modifier.padding(end = 8.dp))
+        Spacer(modifier = Modifier.width(div_margin))
+        ExposedDropdownMenuBox(
+            expanded = expanded,
+            onExpandedChange = { expanded = !expanded }
+        ) {
+            TextField(
+                value = selectedText,
+                onValueChange = {},
+                readOnly = true,
+                label = { Text(hint) },
+                trailingIcon = {
+                    ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
+                },
+                modifier = Modifier
+                    .menuAnchor()
+            )
+
+            ExposedDropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { expanded = false }
+            ) {
+                options.forEach { option ->
+                    DropdownMenuItem(
+                        text = { Text(option.label) },
+                        onClick = {
+                            onModeChange(option)
+                            expanded = false
+                        }
+                    )
+                }
             }
         }
     }

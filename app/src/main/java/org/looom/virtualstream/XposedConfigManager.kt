@@ -1,13 +1,17 @@
 package org.looom.virtualstream
 
 import android.content.Context
-import android.content.Intent
 import android.content.SharedPreferences
+import android.os.Environment
+import android.util.Log
+import android.widget.Toast
 import dev.chrisbanes.haze.HazeState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import androidx.core.content.edit
 import com.google.gson.Gson
+import java.io.File
+import java.io.IOException
 
 /**
  * 存放全局变量和配置
@@ -17,7 +21,7 @@ object VARIABLE {
     lateinit var HAZE_STATE: HazeState
 
     // 串流模式
-    enum class STREAM_MODE(val label: String, val config: String){
+    enum class STREAM_MODE(override val label: String, override val config: String) : SelectableOption {
         NONE("原始流", "stream_none"),
         LOCAL("本地串流", "stream_local"),
         NET("远程串流", "stream_net");
@@ -26,7 +30,7 @@ object VARIABLE {
     }
 
     // 串流摄像头
-    enum class STREAM_CAMERA(val label: String, val config: String){
+    enum class STREAM_CAMERA(override val label: String, override val config: String) : SelectableOption {
         NONE("停用", "camera_none"),
         FRONT("前置摄像头", "camera_front"),
         REAR("后置摄像头", "camera_rear"),
@@ -44,15 +48,13 @@ object VARIABLE {
  *
  * 备注：
  * Config类变量必须全部是String类型
- * 我找不到一种完美的方法进行两app数据交互，读写文件、广播、socket均有各种各样限制，现回退到 https://github.com/Xposed-Modules-Repo/com.example.vcam 文件交互方案
+ * 配置文件保存到了 /[内部存储]/DCIM/virtualstream/config.json
+ * 现通过内容提供者供其他app访问配置, 如果遇到问题就回退到 https://github.com/Xposed-Modules-Repo/com.example.vcam 文件交互方案
  */
 object ConfigManager {
 
     private const val PREF_NAME = "virtualstream_config" // SharedPreferences 名称
     private const val KEY_CONFIG_JSON = "virtualstream_config" // 文件名
-
-    // 广播动作常量（确保其他模块能订阅）
-    const val ACTION_CONFIG_CHANGED = "org.looom.virtualstream.CONFIG_CHANGED" // 配置变更广播
 
     data class Config(
         var STREAM_MODE: String = VARIABLE.STREAM_MODE.NONE.config,
@@ -85,7 +87,7 @@ object ConfigManager {
         _configFlow.value = newConfig
         val json = gson.toJson(newConfig)
         prefs.edit { putString(KEY_CONFIG_JSON, json) } // 保存到 SharedPreferences
-        sendBroadcast(newConfig)
+        saveConfig(newConfig)
     }
 
     fun getCurrentConfig(): Config = _configFlow.value
@@ -104,11 +106,32 @@ object ConfigManager {
         return hashMap
     }
 
-    private fun sendBroadcast(config: Config) {
-        val intent = Intent(ACTION_CONFIG_CHANGED).apply {
-            `package` = null // 必须设为 null 以广播到所有 app
-            putExtra(PREF_NAME, config2hashmap(config)) // 传递配置的 HashMap
+    /**
+     * 将配置保存到 /[内部存储]/DCIM/virtualstream/config.json
+     */
+    private fun saveConfig(config: Config) {
+        if (!Environment.isExternalStorageManager()) {
+            Toast.makeText(appContext, "请前往设置给予所有文件访问权限", Toast.LENGTH_SHORT).show()
         }
-        appContext.sendBroadcast(intent)
+        val json = gson.toJson(config2hashmap(config)) // 将 Config 转为 JSON
+
+        // 获取 /storage/emulated/0/DCIM/virtualstream 路径
+        val dcimDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
+        val targetDir = File(dcimDir, "virtualstream")
+
+        // 创建目录（如果不存在）
+        if (!targetDir.exists()) {
+            targetDir.mkdirs()
+        }
+
+        // 创建 config.json 文件
+        val configFile = File(targetDir, "config.json")
+
+        try {
+            configFile.writeText(json)
+            Log.d("SaveConfig", "配置已保存到: ${configFile.absolutePath}")
+        } catch (e: IOException) {
+            Log.e("SaveConfig", "保存失败", e)
+        }
     }
 }

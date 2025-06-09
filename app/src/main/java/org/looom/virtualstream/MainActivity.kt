@@ -1,6 +1,11 @@
 package org.looom.virtualstream
 
+import android.content.Intent
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.os.Environment
+import android.provider.Settings
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,7 +26,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
-import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.rememberHazeState
 import org.looom.virtualstream.VARIABLE.HAZE_STATE
 import org.looom.virtualstream.pages.AboutPage
@@ -30,30 +34,33 @@ import org.looom.virtualstream.pages.LocalStreamPage
 import org.looom.virtualstream.pages.NetStreamPage
 import org.looom.virtualstream.ui.theme.Box_Main_Background
 import org.looom.virtualstream.ui.theme.VirtualStreamTheme
-
-
-
-/**
- * xposed json 配置模板
- *
- * 不要使用 SharedPreferences 不同设备当程序后台时可能出现配置不可读
- * 也不要试图文件写公共目录，安卓13+只能通过 MediaStore/SAF 读写公共目录
- */
-object xposed_config {
-    var STREAM_MODE = VARIABLE.STREAM_MODE.NONE.config
-    var STREAM_CAMERA = VARIABLE.STREAM_CAMERA.NONE.config
-}
-
-/**
- * xposed json 配置模板的文件保存
- */
+import androidx.core.net.toUri
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        enableEdgeToEdge()
-        // 让内容绘制到系统栏区域
-//        WindowCompat.setDecorFitsSystemWindows(window, false)
+
+        // 文件读取权限
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            requestPermissions(arrayOf(
+                android.Manifest.permission.READ_MEDIA_IMAGES,
+                android.Manifest.permission.READ_MEDIA_VIDEO,
+            ), 101)
+        } else {
+            requestPermissions(arrayOf(
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ), 101)
+        }
+        // 申请所有文件访问权限
+        if (!Environment.isExternalStorageManager()) {
+            val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION).apply {
+                data = "package:${applicationContext.packageName}".toUri()
+            }
+            startActivity(intent)
+        }
+
+
+
         setContent {
             VirtualStreamTheme {
                 VirtualStreamApp()

@@ -57,6 +57,6 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-    implementation("dev.chrisbanes.haze:haze:1.6.4") // 组件模糊库
-    implementation("com.google.code.gson:gson:2.13.1")
+    implementation(libs.haze) // 组件模糊库
+    implementation(libs.gson)
 }
