@@ -1,5 +1,6 @@
 [versions]
 agp = "8.11.0-alpha10"
+api = "82"
 gson = "2.13.1"
 haze = "1.6.4"
 kotlin = "2.0.21"
@@ -13,6 +14,7 @@ composeBom = "2024.09.00"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+api = { module = "de.robv.android.xposed:api", version.ref = "api" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 haze = { module = "dev.chrisbanes.haze:haze", version.ref = "haze" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }

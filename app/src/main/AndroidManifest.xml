@@ -57,6 +57,16 @@
             android:authorities="org.looom.virtualstream.configprovider"
             android:exported="true"
             android:grantUriPermissions="true"/>
+
+        <meta-data
+            android:name="xposedmodule"
+            android:value="true" />
+        <meta-data
+            android:name="xposeddescription"
+            android:value="安卓虚拟摄像头" />
+        <meta-data
+            android:name="xposedminversion"
+            android:value="89" />
     </application>
 
 </manifest>

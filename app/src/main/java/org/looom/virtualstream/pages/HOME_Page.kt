@@ -46,6 +46,7 @@ import org.looom.virtualstream.VARIABLE
 import org.looom.virtualstream.VARIABLE.HAZE_STATE
 import org.looom.virtualstream.ui.theme.Dimens.div_margin
 import org.looom.virtualstream.ui.theme.Dimens.title_size
+import org.looom.virtualstream.ui.theme.Pink_sw
 import org.looom.virtualstream.ui.theme.div_Padding_Modifier
 import org.looom.virtualstream.ui.theme.div_Status_Padding_Modifier
 
@@ -114,7 +115,7 @@ fun HomePage(modifier: Modifier = Modifier) {
 
             // 串流选择
             Column (modifier = Modifier.div_Padding_Modifier(hazeState = HAZE_STATE)) {
-                Text("串流及摄像头配置：")
+                Text("串流及摄像头配置：",color = Pink_sw, fontWeight = FontWeight.Bold)
                 ModeSelector(
                     currentMode = currentMode,
                     onModeChange = { mode ->
@@ -164,7 +165,7 @@ fun <T> ModeSelector(
         horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(label, modifier = Modifier.padding(end = 8.dp))
+        Text(label, modifier = Modifier.padding(end = 8.dp), color = Pink_sw)
         Spacer(modifier = Modifier.width(div_margin))
         ExposedDropdownMenuBox(
             expanded = expanded,
@@ -174,7 +175,7 @@ fun <T> ModeSelector(
                 value = selectedText,
                 onValueChange = {},
                 readOnly = true,
-                label = { Text(hint) },
+                label = { Text(hint, color = Pink_sw) },
                 trailingIcon = {
                     ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
                 },

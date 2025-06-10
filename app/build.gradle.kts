@@ -36,6 +36,13 @@ android {
     }
     buildFeatures {
         compose = true
+        /**
+         *  启用 BuildConfig 生成, 让xposed能获取到当前包名,
+         *  该功能于AGP 8.0弃用, 于AGP 9.0彻底删除
+         *  参考 https://stackoverflow.com/questions/74634321/fixing-the-build-type-contains-custom-buildconfig-fields-but-the-feature-is-di
+         *  参考 https://cs.android.com/android-studio/platform/tools/base/+/0bc1c23297760643b03e8cfd8acc52c007a99cd6
+         */
+        buildConfig = true // 这目前是个无效的选项
     }
 }
 
@@ -57,6 +64,11 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    /**
+     * 加入三方库
+     */
     implementation(libs.haze) // 组件模糊库
-    implementation(libs.gson)
+    implementation(libs.gson) // Gson
+    compileOnly(libs.api) // Xposed API
 }
