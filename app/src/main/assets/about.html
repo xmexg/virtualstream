@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>关于我们</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 动画库 -->
+    <link rel="stylesheet" href="css/animate.min.css">
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+            font-family: "Segoe UI", sans-serif;
+        }
+
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #da9aa9, #F9FAFC);
+            z-index: -1;
+        }
+
+        .container {
+            position: relative;
+            height: 100%;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .avatar {
+            width: 40vw;
+            height: 40vw;
+            max-width: 200px;
+            max-height: 200px;
+            border-radius: 50%;
+            object-fit: cover;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            border: 5px solid white;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        h1 {
+            color: #ffffff;
+            margin: 20px 0 10px;
+            font-size: 2em;
+            text-shadow: 2px 2px 4px #000;
+        }
+
+        p {
+            color: #eee;
+            font-size: 1.1em;
+            max-width: 80%;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+<div id="particles-js"></div>
+
+<div class="container">
+    <img class="avatar animate__animated animate__fadeInDown" src="images/hqsw_w.png" alt="头像">
+    <h1 class="animate__animated animate__fadeInUp">安卓虚拟摄像头</h1>
+    <p class="animate__animated animate__fadeInUp">
+        项目地址： <a href="https://github.com/xmexg/virtualstream" target="_blank" style="color: #99f2c8;">GitHub</a><br>
+    </p>
+</div>
+
+<script src="js/particles.min.js"></script>
+<script src="js/about.js"></script>
+</body>
+</html>

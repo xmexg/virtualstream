@@ -49,6 +49,7 @@ import org.looom.virtualstream.ui.theme.Dimens.title_size
 import org.looom.virtualstream.ui.theme.Pink_sw
 import org.looom.virtualstream.ui.theme.div_Padding_Modifier
 import org.looom.virtualstream.ui.theme.div_Status_Padding_Modifier
+import org.looom.virtualstream.ui.theme.div_default
 
 @Preview( )
 @Composable
@@ -115,7 +116,7 @@ fun HomePage(modifier: Modifier = Modifier) {
 
             // 串流选择
             Column (modifier = Modifier.div_Padding_Modifier(hazeState = HAZE_STATE)) {
-                Text("串流及摄像头配置：",color = Pink_sw, fontWeight = FontWeight.Bold)
+                Text("串流及摄像头配置：",color = Pink_sw, fontWeight = FontWeight.Bold, modifier = Modifier.background(div_default.background))
                 ModeSelector(
                     currentMode = currentMode,
                     onModeChange = { mode ->

@@ -58,7 +58,7 @@ object ConfigManager {
 
     data class Config(
         var STREAM_MODE: String = VARIABLE.STREAM_MODE.NONE.config,
-        var STREAM_CAMERA: String = VARIABLE.STREAM_CAMERA.NONE.config
+        var STREAM_CAMERA: String = VARIABLE.STREAM_CAMERA.ALL.config
     )
 
     private lateinit var appContext: Context
