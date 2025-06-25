@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import androidx.core.content.edit
 import com.google.gson.Gson
+import org.looom.virtualstream.VARIABLE.FILE_PATH
 import java.io.File
 import java.io.IOException
 
@@ -19,6 +20,12 @@ import java.io.IOException
 object VARIABLE {
     // 记录 haze 模糊区域
     lateinit var HAZE_STATE: HazeState
+
+    // 文件夹路径 /storage/emulated/0/DCIM/virtualstream
+    var FILE_PATH: String = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).absolutePath + "/virtualstream/"
+
+    // 摄像头视频文件路径
+    var VIDEO_PATH: String = FILE_PATH + "virtual.mp4"
 
     // 串流模式
     enum class STREAM_MODE(override val label: String, override val config: String) : SelectableOption {
@@ -116,8 +123,7 @@ object ConfigManager {
         val json = gson.toJson(config2hashmap(config)) // 将 Config 转为 JSON
 
         // 获取 /storage/emulated/0/DCIM/virtualstream 路径
-        val dcimDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
-        val targetDir = File(dcimDir, "virtualstream")
+        val targetDir = File(FILE_PATH)
 
         // 创建目录（如果不存在）
         if (!targetDir.exists()) {

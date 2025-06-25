@@ -2,7 +2,6 @@ package org.looom.virtualstream.pages
 
 import org.looom.virtualstream.R
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,7 +9,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
@@ -47,9 +45,9 @@ import org.looom.virtualstream.VARIABLE.HAZE_STATE
 import org.looom.virtualstream.ui.theme.Dimens.div_margin
 import org.looom.virtualstream.ui.theme.Dimens.title_size
 import org.looom.virtualstream.ui.theme.Pink_sw
+import org.looom.virtualstream.ui.theme.div_Box_Title_Text
 import org.looom.virtualstream.ui.theme.div_Padding_Modifier
 import org.looom.virtualstream.ui.theme.div_Status_Padding_Modifier
-import org.looom.virtualstream.ui.theme.div_default
 
 @Preview( )
 @Composable
@@ -116,7 +114,7 @@ fun HomePage(modifier: Modifier = Modifier) {
 
             // 串流选择
             Column (modifier = Modifier.div_Padding_Modifier(hazeState = HAZE_STATE)) {
-                Text("串流及摄像头配置：",color = Pink_sw, fontWeight = FontWeight.Bold, modifier = Modifier.background(div_default.background))
+                div_Box_Title_Text("串流及摄像头配置：",color = Pink_sw, fontWeight = FontWeight.Bold, fontSize = title_size)
                 ModeSelector(
                     currentMode = currentMode,
                     onModeChange = { mode ->
@@ -166,7 +164,7 @@ fun <T> ModeSelector(
         horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(label, modifier = Modifier.padding(end = 8.dp), color = Pink_sw)
+        div_Box_Title_Text(label)
         Spacer(modifier = Modifier.width(div_margin))
         ExposedDropdownMenuBox(
             expanded = expanded,
@@ -180,8 +178,7 @@ fun <T> ModeSelector(
                 trailingIcon = {
                     ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
                 },
-                modifier = Modifier
-                    .menuAnchor()
+                modifier = Modifier.menuAnchor()
             )
 
             ExposedDropdownMenu(
@@ -190,7 +187,7 @@ fun <T> ModeSelector(
             ) {
                 options.forEach { option ->
                     DropdownMenuItem(
-                        text = { Text(option.label) },
+                        text = { div_Box_Title_Text(option.label, color = Pink_sw) },
                         onClick = {
                             onModeChange(option)
                             expanded = false

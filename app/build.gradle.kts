@@ -71,4 +71,6 @@ dependencies {
     implementation(libs.haze) // 组件模糊库
     implementation(libs.gson) // Gson
     compileOnly(libs.api) // Xposed API
+    implementation(libs.androidx.media3.exoplayer) // 视频播放器
+    implementation(libs.androidx.media3.ui) // 视频播放器UI组件
 }

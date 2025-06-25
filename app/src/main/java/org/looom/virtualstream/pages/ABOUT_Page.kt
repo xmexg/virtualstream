@@ -11,12 +11,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.compose.ui.zIndex
 
 @SuppressLint("SetJavaScriptEnabled")
 @Composable
 fun AboutPage(modifier: Modifier = Modifier) {
     AndroidView(
-        modifier = modifier.fillMaxSize(), // ✅ 占满父容器
+        modifier = modifier.fillMaxSize().zIndex(1f), // 保证它在顶层,
         factory = { context ->
             WebView(context).apply {
                 layoutParams = ViewGroup.LayoutParams(

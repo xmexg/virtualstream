@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -18,9 +19,13 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Fill
+import androidx.compose.material3.Text
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.TextUnit
 import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.HazeStyle
 import dev.chrisbanes.haze.hazeEffect
+import org.looom.virtualstream.ui.theme.Dimens.title_size
 
 
 /**
@@ -141,4 +146,20 @@ private fun DrawScope.drawSquare(center: Offset, size: Float, color: Color) {
 // 画圆圈函数（你已有）
 private fun DrawScope.drawCircleShape(center: Offset, radius: Float, color: Color) {
     drawCircle(color = color, radius = radius, center = center)
+}
+
+// 选项卡文字
+@Composable
+fun div_Box_Title_Text(
+    label: String,
+    modifier: Modifier = Modifier.background(div_Box_Title_Text_BG).clip(RoundedCornerShape(Dimens.div_cornerRadius)).padding(8.dp),
+    color: Color = Pink_sw,
+    fontWeight: FontWeight = FontWeight.Normal,
+    fontSize: TextUnit = MaterialTheme.typography.titleLarge.fontSize
+) {
+    return Text(label, modifier = modifier, color = color, fontWeight = fontWeight, fontSize = fontSize)
+}
+@Composable
+fun div_Box_Title_Text_Head(label: String){
+    return div_Box_Title_Text(label = label, fontWeight = FontWeight.Bold, fontSize = title_size)
 }

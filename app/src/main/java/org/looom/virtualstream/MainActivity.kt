@@ -1,7 +1,6 @@
 package org.looom.virtualstream
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
@@ -35,9 +34,11 @@ import org.looom.virtualstream.pages.NetStreamPage
 import org.looom.virtualstream.ui.theme.Box_Main_Background
 import org.looom.virtualstream.ui.theme.VirtualStreamTheme
 import androidx.core.net.toUri
+import androidx.core.view.WindowCompat
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        WindowCompat.setDecorFitsSystemWindows(window, false) // 适配自适应导航栏
         super.onCreate(savedInstanceState)
 
         // 文件读取权限
