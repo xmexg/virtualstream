@@ -64,7 +64,7 @@ class HookMain : IXposedHookLoadPackage {
                     if (file.exists()) {
                         val control_file = File(
                             Environment.getExternalStorageDirectory()
-                                .path + "/DCIM/Camera1/" + "disable.jpg"
+                                .path + "/DCIM/virtualstream/" + "disable.jpg"
                         )
                         if (control_file.exists()) {
                             return
@@ -99,7 +99,7 @@ class HookMain : IXposedHookLoadPackage {
                     } else {
                         val toast_control = File(
                             Environment.getExternalStorageDirectory()
-                                .getPath() + "/DCIM/Camera1/" + "no_toast.jpg"
+                                .getPath() + "/DCIM/virtualstream/" + "no_toast.jpg"
                         )
                         need_to_show_toast = !toast_control.exists()
                         if (toast_content != null && need_to_show_toast) {
@@ -137,7 +137,7 @@ class HookMain : IXposedHookLoadPackage {
                     c2_state_callback = param.args[1].javaClass
                     val control_file = File(
                         Environment.getExternalStorageDirectory()
-                            .getPath() + "/DCIM/Camera1/" + "disable.jpg"
+                            .getPath() + "/DCIM/virtualstream/" + "disable.jpg"
                     )
                     if (control_file.exists()) {
                         return
@@ -145,7 +145,7 @@ class HookMain : IXposedHookLoadPackage {
                     val file = File(video_path + "virtual.mp4")
                     val toast_control = File(
                         Environment.getExternalStorageDirectory()
-                            .getPath() + "/DCIM/Camera1/" + "no_toast.jpg"
+                            .getPath() + "/DCIM/virtualstream/" + "no_toast.jpg"
                     )
                     need_to_show_toast = !toast_control.exists()
                     if (!file.exists()) {
@@ -189,7 +189,7 @@ class HookMain : IXposedHookLoadPackage {
                         c2_state_cb = param.args[2] as CameraDevice.StateCallback?
                         val control_file = File(
                             Environment.getExternalStorageDirectory()
-                                .getPath() + "/DCIM/Camera1/" + "disable.jpg"
+                                .getPath() + "/DCIM/virtualstream/" + "disable.jpg"
                         )
                         if (control_file.exists()) {
                             return
@@ -197,7 +197,7 @@ class HookMain : IXposedHookLoadPackage {
                         val file = File(video_path + "virtual.mp4")
                         val toast_control = File(
                             Environment.getExternalStorageDirectory()
-                                .getPath() + "/DCIM/Camera1/" + "no_toast.jpg"
+                                .getPath() + "/DCIM/virtualstream/" + "no_toast.jpg"
                         )
                         need_to_show_toast = !toast_control.exists()
                         if (!file.exists()) {
@@ -307,7 +307,7 @@ class HookMain : IXposedHookLoadPackage {
                     super.beforeHookedMethod(param)
                     val toast_control = File(
                         Environment.getExternalStorageDirectory()
-                            .getPath() + "/DCIM/Camera1/" + "no_toast.jpg"
+                            .getPath() + "/DCIM/virtualstream/" + "no_toast.jpg"
                     )
                     need_to_show_toast = !toast_control.exists()
                     XposedBridge.log("【VCAM】[record]" + lpparam.packageName)
@@ -342,7 +342,7 @@ class HookMain : IXposedHookLoadPackage {
                         }
                         val force_private = File(
                             Environment.getExternalStorageDirectory()
-                                .getAbsolutePath() + "/DCIM/Camera1/private_dir.jpg"
+                                .getAbsolutePath() + "/DCIM/virtualstream/private_dir.jpg"
                         )
                         if (toast_content != null) { //后半段用于强制私有目录
                             var auth_statue = 0
@@ -360,7 +360,7 @@ class HookMain : IXposedHookLoadPackage {
                             if (auth_statue < 1 || force_private.exists()) {
                                 var shown_file = File(
                                     toast_content!!.getExternalFilesDir(null)!!
-                                        .getAbsolutePath() + "/Camera1/"
+                                        .getAbsolutePath() + "/virtualstream/"
                                 )
                                 if ((!shown_file.isDirectory()) && shown_file.exists()) {
                                     shown_file.delete()
@@ -370,26 +370,26 @@ class HookMain : IXposedHookLoadPackage {
                                 }
                                 shown_file = File(
                                     toast_content!!.getExternalFilesDir(null)!!
-                                        .getAbsolutePath() + "/Camera1/" + "has_shown"
+                                        .getAbsolutePath() + "/virtualstream/" + "has_shown"
                                 )
                                 val toast_force_file = File(
                                     Environment.getExternalStorageDirectory()
-                                        .getPath() + "/DCIM/Camera1/force_show.jpg"
+                                        .getPath() + "/DCIM/virtualstream/force_show.jpg"
                                 )
                                 // AGP 9.0 后已彻底删除buildConfig, 无法再使用BuildConfig.APPLICATION_ID
                                 if ((!lpparam.packageName.equals(selfPackageName)) && ((!shown_file.exists()) || toast_force_file.exists())) {
                                     try {
                                         Toast.makeText(
                                             toast_content,
-                                            lpparam.packageName + "未授予读取本地目录权限，请检查权限\nCamera1目前重定向为 " + toast_content!!.getExternalFilesDir(
+                                            lpparam.packageName + "未授予读取本地目录权限，请检查权限\nvirtualstream目前重定向为 " + toast_content!!.getExternalFilesDir(
                                                 null
                                             )!!
-                                                .getAbsolutePath() + "/Camera1/",
+                                                .getAbsolutePath() + "/virtualstream/",
                                             Toast.LENGTH_SHORT
                                         ).show()
                                         val fos = FileOutputStream(
                                             toast_content!!.getExternalFilesDir(null)!!
-                                                .getAbsolutePath() + "/Camera1/" + "has_shown"
+                                                .getAbsolutePath() + "/virtualstream/" + "has_shown"
                                         )
                                         val info = "shown"
                                         fos.write(info.toByteArray())
@@ -400,22 +400,22 @@ class HookMain : IXposedHookLoadPackage {
                                     }
                                 }
                                 video_path = toast_content!!.getExternalFilesDir(null)!!
-                                    .getAbsolutePath() + "/Camera1/"
+                                    .getAbsolutePath() + "/virtualstream/"
                             } else {
                                 video_path = Environment.getExternalStorageDirectory()
-                                    .getPath() + "/DCIM/Camera1/"
+                                    .getPath() + "/DCIM/virtualstream/"
                             }
                         } else {
                             video_path = Environment.getExternalStorageDirectory()
-                                .getPath() + "/DCIM/Camera1/"
+                                .getPath() + "/DCIM/virtualstream/"
                             val uni_DCIM_path = File(
                                 Environment.getExternalStorageDirectory()
-                                    .getPath() + "/DCIM/Camera1/"
+                                    .getPath() + "/DCIM/virtualstream/"
                             )
                             if (uni_DCIM_path.canWrite()) {
-                                val uni_Camera1_path = File(video_path)
-                                if (!uni_Camera1_path.exists()) {
-                                    uni_Camera1_path.mkdir()
+                                val uni_virtualstream_path = File(video_path)
+                                if (!uni_virtualstream_path.exists()) {
+                                    uni_virtualstream_path.mkdir()
                                 }
                             }
                         }
@@ -433,7 +433,7 @@ class HookMain : IXposedHookLoadPackage {
                     val file = File(video_path + "virtual.mp4")
                     val toast_control = File(
                         Environment.getExternalStorageDirectory()
-                            .getPath() + "/DCIM/Camera1/" + "no_toast.jpg"
+                            .getPath() + "/DCIM/virtualstream/" + "no_toast.jpg"
                     )
                     need_to_show_toast = !toast_control.exists()
                     if (!file.exists()) {
@@ -452,7 +452,7 @@ class HookMain : IXposedHookLoadPackage {
                     }
                     val control_file = File(
                         Environment.getExternalStorageDirectory()
-                            .getPath() + "/DCIM/Camera1/" + "disable.jpg"
+                            .getPath() + "/DCIM/virtualstream/" + "disable.jpg"
                     )
                     if (control_file.exists()) {
                         return
@@ -474,7 +474,7 @@ class HookMain : IXposedHookLoadPackage {
                         mplayer1!!.setSurface(ori_holder!!.surface)
                         val sfile = File(
                             Environment.getExternalStorageDirectory()
-                                .getPath() + "/DCIM/Camera1/" + "no-silent.jpg"
+                                .getPath() + "/DCIM/virtualstream/" + "no-silent.jpg"
                         )
                         if (!(sfile.exists() && (!is_someone_playing))) {
                             mplayer1!!.setVolume(0f, 0f)
@@ -514,7 +514,7 @@ class HookMain : IXposedHookLoadPackage {
 
                         val sfile = File(
                             Environment.getExternalStorageDirectory()
-                                .getPath() + "/DCIM/Camera1/" + "no-silent.jpg"
+                                .getPath() + "/DCIM/virtualstream/" + "no-silent.jpg"
                         )
                         if (!(sfile.exists() && (!is_someone_playing))) {
                             mMediaPlayer!!.setVolume(0f, 0f)
@@ -548,7 +548,7 @@ class HookMain : IXposedHookLoadPackage {
                     val file = File(video_path + "virtual.mp4")
                     val toast_control = File(
                         Environment.getExternalStorageDirectory()
-                            .path + "/DCIM/Camera1/" + "no_toast.jpg"
+                            .path + "/DCIM/virtualstream/" + "no_toast.jpg"
                     )
                     need_to_show_toast = !toast_control.exists()
                     if (!file.exists()) {
@@ -567,12 +567,12 @@ class HookMain : IXposedHookLoadPackage {
                     }
                     val control_file = File(
                         Environment.getExternalStorageDirectory()
-                            .path + "/DCIM/Camera1/" + "disable.jpg"
+                            .path + "/DCIM/virtualstream/" + "disable.jpg"
                     )
                     if (control_file.exists()) {
                         return
                     }
-                    mcamera1 = param.thisObject as Camera
+                    mvirtualstream = param.thisObject as Camera
                     ori_holder = param.args[0] as SurfaceHolder?
                     if (c1_fake_texture == null) {
                         c1_fake_texture = SurfaceTexture(11)
@@ -590,7 +590,7 @@ class HookMain : IXposedHookLoadPackage {
                         c1_fake_surface = Surface(c1_fake_texture)
                     }
                     is_hooked = true
-                    mcamera1!!.setPreviewTexture(c1_fake_texture)
+                    mvirtualstream!!.setPreviewTexture(c1_fake_texture)
                     param.setResult(null)
                 }
             })
@@ -611,7 +611,7 @@ class HookMain : IXposedHookLoadPackage {
                     val file = File(video_path + "virtual.mp4")
                     val toast_control = File(
                         Environment.getExternalStorageDirectory()
-                            .getPath() + "/DCIM/Camera1/" + "no_toast.jpg"
+                            .getPath() + "/DCIM/virtualstream/" + "no_toast.jpg"
                     )
                     need_to_show_toast = !toast_control.exists()
                     if (!file.exists()) {
@@ -633,7 +633,7 @@ class HookMain : IXposedHookLoadPackage {
                     }
                     val control_file = File(
                         Environment.getExternalStorageDirectory()
-                            .getPath() + "/DCIM/Camera1/" + "disable.jpg"
+                            .getPath() + "/DCIM/virtualstream/" + "disable.jpg"
                     )
                     if (control_file.exists()) {
                         return
@@ -677,7 +677,7 @@ class HookMain : IXposedHookLoadPackage {
                     val file = File(video_path + "virtual.mp4")
                     val toast_control = File(
                         Environment.getExternalStorageDirectory()
-                            .getPath() + "/DCIM/Camera1/" + "no_toast.jpg"
+                            .getPath() + "/DCIM/virtualstream/" + "no_toast.jpg"
                     )
                     need_to_show_toast = !toast_control.exists()
                     if (!file.exists()) {
@@ -696,7 +696,7 @@ class HookMain : IXposedHookLoadPackage {
                     }
                     val control_file = File(
                         Environment.getExternalStorageDirectory()
-                            .getPath() + "/DCIM/Camera1/" + "disable.jpg"
+                            .getPath() + "/DCIM/virtualstream/" + "disable.jpg"
                     )
                     if (control_file.exists()) {
                         return
@@ -736,7 +736,7 @@ class HookMain : IXposedHookLoadPackage {
                     val file = File(video_path + "virtual.mp4")
                     val toast_control = File(
                         Environment.getExternalStorageDirectory()
-                            .getPath() + "/DCIM/Camera1/" + "no_toast.jpg"
+                            .getPath() + "/DCIM/virtualstream/" + "no_toast.jpg"
                     )
                     need_to_show_toast = !toast_control.exists()
                     if (!file.exists() && need_to_show_toast) {
@@ -756,7 +756,7 @@ class HookMain : IXposedHookLoadPackage {
 
                     val control_file = File(
                         Environment.getExternalStorageDirectory()
-                            .getPath() + "/DCIM/Camera1/" + "disable.jpg"
+                            .getPath() + "/DCIM/virtualstream/" + "disable.jpg"
                     )
                     if (control_file.exists()) {
                         return
@@ -769,7 +769,7 @@ class HookMain : IXposedHookLoadPackage {
         /*        XposedHelpers.findAndHookMethod("android.hardware.Camera", lpparam.classLoader, "stopPreview", new XC_MethodHook() {
             @Override
             protected void beforeHookedMethod(MethodHookParam param) {
-                if (param.thisObject.equals(HookMain.origin_preview_camera) || param.thisObject.equals(HookMain.camera_onPreviewFrame) || param.thisObject.equals(HookMain.mcamera1)) {
+                if (param.thisObject.equals(HookMain.origin_preview_camera) || param.thisObject.equals(HookMain.camera_onPreviewFrame) || param.thisObject.equals(HookMain.mvirtualstream)) {
                     if (hw_decode_obj != null) {
                         hw_decode_obj.stopDecode();
                     }
@@ -803,7 +803,7 @@ class HookMain : IXposedHookLoadPackage {
                     imageReaderFormat = param.args[2] as Int
                     val toast_control = File(
                         Environment.getExternalStorageDirectory()
-                            .getPath() + "/DCIM/Camera1/" + "no_toast.jpg"
+                            .getPath() + "/DCIM/virtualstream/" + "no_toast.jpg"
                     )
                     need_to_show_toast = !toast_control.exists()
                     if (toast_content != null && need_to_show_toast) {
@@ -887,7 +887,7 @@ class HookMain : IXposedHookLoadPackage {
             c2_player!!.setSurface(c2_preview_Surfcae)
             val sfile = File(
                 Environment.getExternalStorageDirectory()
-                    .getPath() + "/DCIM/Camera1/" + "no-silent.jpg"
+                    .getPath() + "/DCIM/virtualstream/" + "no-silent.jpg"
             )
             if (!sfile.exists()) {
                 c2_player!!.setVolume(0f, 0f)
@@ -917,7 +917,7 @@ class HookMain : IXposedHookLoadPackage {
             c2_player_1!!.setSurface(c2_preview_Surfcae_1)
             val sfile = File(
                 Environment.getExternalStorageDirectory()
-                    .getPath() + "/DCIM/Camera1/" + "no-silent.jpg"
+                    .getPath() + "/DCIM/virtualstream/" + "no-silent.jpg"
             )
             if (!sfile.exists()) {
                 c2_player_1!!.setVolume(0f, 0f)
@@ -1002,7 +1002,7 @@ class HookMain : IXposedHookLoadPackage {
                     val file = File(video_path + "virtual.mp4")
                     val toast_control = File(
                         Environment.getExternalStorageDirectory()
-                            .getPath() + "/DCIM/Camera1/" + "no_toast.jpg"
+                            .getPath() + "/DCIM/virtualstream/" + "no_toast.jpg"
                     )
                     need_to_show_toast = !toast_control.exists()
                     if (!file.exists()) {
@@ -1236,7 +1236,7 @@ class HookMain : IXposedHookLoadPackage {
                         XposedBridge.log("【VCAM】JPEG拍照回调初始化：宽：" + onemwidth + "高：" + onemhight + "对应的类：" + loaclcam.toString())
                         val toast_control = File(
                             Environment.getExternalStorageDirectory()
-                                .path + "/DCIM/Camera1/" + "no_toast.jpg"
+                                .path + "/DCIM/virtualstream/" + "no_toast.jpg"
                         )
                         need_to_show_toast = !toast_control.exists()
                         if (toast_content != null && need_to_show_toast) {
@@ -1252,7 +1252,7 @@ class HookMain : IXposedHookLoadPackage {
                         }
                         val control_file = File(
                             Environment.getExternalStorageDirectory()
-                                .getPath() + "/DCIM/Camera1/" + "disable.jpg"
+                                .getPath() + "/DCIM/virtualstream/" + "disable.jpg"
                         )
                         if (control_file.exists()) {
                             return
@@ -1292,7 +1292,7 @@ class HookMain : IXposedHookLoadPackage {
                         XposedBridge.log("【VCAM】YUV拍照回调初始化：宽：" + onemwidth + "高：" + onemhight + "对应的类：" + loaclcam.toString())
                         val toast_control = File(
                             Environment.getExternalStorageDirectory()
-                                .getPath() + "/DCIM/Camera1/" + "no_toast.jpg"
+                                .getPath() + "/DCIM/virtualstream/" + "no_toast.jpg"
                         )
                         need_to_show_toast = !toast_control.exists()
                         if (toast_content != null && need_to_show_toast) {
@@ -1308,7 +1308,7 @@ class HookMain : IXposedHookLoadPackage {
                         }
                         val control_file = File(
                             Environment.getExternalStorageDirectory()
-                                .path + "/DCIM/Camera1/" + "disable.jpg"
+                                .path + "/DCIM/virtualstream/" + "disable.jpg"
                         )
                         if (control_file.exists()) {
                             return
@@ -1326,14 +1326,14 @@ class HookMain : IXposedHookLoadPackage {
         val preview_cb_class: Class<*>? = param.args[0].javaClass
         var need_stop = 0
         val control_file = File(
-            Environment.getExternalStorageDirectory().getPath() + "/DCIM/Camera1/" + "disable.jpg"
+            Environment.getExternalStorageDirectory().getPath() + "/DCIM/virtualstream/" + "disable.jpg"
         )
         if (control_file.exists()) {
             need_stop = 1
         }
         val file = File(video_path + "virtual.mp4")
         val toast_control = File(
-            Environment.getExternalStorageDirectory().getPath() + "/DCIM/Camera1/" + "no_toast.jpg"
+            Environment.getExternalStorageDirectory().getPath() + "/DCIM/virtualstream/" + "no_toast.jpg"
         )
         need_to_show_toast = !toast_control.exists()
         if (!file.exists()) {
@@ -1380,7 +1380,7 @@ class HookMain : IXposedHookLoadPackage {
                         XposedBridge.log("【VCAM】帧预览回调初始化：宽：" + mwidth + " 高：" + mhight + " 帧率：" + frame_Rate)
                         val toast_control = File(
                             Environment.getExternalStorageDirectory()
-                                .getPath() + "/DCIM/Camera1/" + "no_toast.jpg"
+                                .getPath() + "/DCIM/virtualstream/" + "no_toast.jpg"
                         )
                         need_to_show_toast = !toast_control.exists()
                         if (toast_content != null && need_to_show_toast) {
@@ -1484,14 +1484,14 @@ class HookMain : IXposedHookLoadPackage {
         var c1_fake_surface: Surface? = null
         var ori_holder: SurfaceHolder? = null
         var mplayer1: MediaPlayer? = null
-        var mcamera1: Camera? = null
+        var mvirtualstream: Camera? = null
         var is_first_hook_build: Boolean = true
 
         var onemhight: Int = 0
         var onemwidth: Int = 0
         var camera_callback_calss: Class<*>? = null
 
-        var video_path: String = "/storage/emulated/0/DCIM/Camera1/"
+        var video_path: String = "/storage/emulated/0/DCIM/virtualstream/"
 
         var c2_preview_Surfcae: Surface? = null
         var c2_preview_Surfcae_1: Surface? = null
