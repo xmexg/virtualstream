@@ -67,12 +67,12 @@ fun LocalStreamPage(modifier: Modifier = Modifier) {
 
                     Button(onClick = {
                         val success = copyVideoToTarget(context, uri)
+                        if (success) updateVideoFlag++ // 触发重新加载
                         Toast.makeText(
                             context,
                             if (success) "应用视频成功" else "应用视频失败",
                             Toast.LENGTH_SHORT
                         ).show()
-                        if (success) updateVideoFlag++ // 触发重新加载
                     }) {
                         Text("应用视频")
                     }
@@ -82,12 +82,12 @@ fun LocalStreamPage(modifier: Modifier = Modifier) {
             Column(modifier = Modifier.div_Padding_Modifier()) {
                 div_Box_Title_Text_Head("当前视频")
                 if (File(VIDEO_PATH).exists()) {
-                    // 每次更新都会重新触发 Composable 重新渲染播放器
+                    // key：当变量改变时，重新加载内容
                     key(updateVideoFlag) {
                         ExoPlayerPreview(uri = Uri.fromFile(File(VIDEO_PATH)))
                     }
                 } else {
-                    div_Box_Title_Text("未应用视频", modifier = Modifier.div_Padding_Modifier())
+                    div_Box_Title_Text("未应用视频")
                 }
             }
         }
